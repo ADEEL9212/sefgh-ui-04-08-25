@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { ExpandablePromptInput } from '@/components/ExpandablePromptInput';
+import { ToolsDropdown } from '@/components/ToolsDropdown';
 import { Card, CardContent } from '@/components/ui/card';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { 
@@ -341,54 +342,7 @@ export const ChatPanel = ({
         <form onSubmit={handleSubmit} className="relative">
           <div className="bg-gray-100 dark:bg-gray-700 rounded-2xl px-3 py-1 flex items-center gap-2">
             {/* Tools dropdown */}
-            <div className="relative tools-menu-container">
-              <Button
-                type="button"
-                variant="ghost"
-                className="flex items-center gap-2 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-full px-3 py-1.5 text-sm"
-                onClick={() => setShowToolsMenu(!showToolsMenu)}
-              >
-                <Settings className="h-4 w-4" />
-                <span>Tools</span>
-                <ChevronDown className="h-3 w-3" />
-              </Button>
-              
-              {/* Tools dropdown menu */}
-              {showToolsMenu && (
-                <div className="absolute bottom-full left-0 mb-2 bg-gray-800 text-white rounded-lg shadow-xl p-2 w-56 z-50">
-                  <div 
-                    className="flex items-center gap-3 p-3 hover:bg-gray-700 rounded cursor-pointer"
-                    onClick={() => {
-                      onToggleGithubSearch?.();
-                      setShowToolsMenu(false);
-                    }}
-                  >
-                    <Github className="h-4 w-4" />
-                    <span className="text-sm">Github search</span>
-                  </div>
-                  <div className="flex items-center gap-3 p-3 hover:bg-gray-700 rounded cursor-pointer">
-                    <ImageIcon className="h-4 w-4" />
-                    <span className="text-sm">Create image</span>
-                  </div>
-                  <div className="flex items-center gap-3 p-3 hover:bg-gray-700 rounded cursor-pointer">
-                    <Lightbulb className="h-4 w-4" />
-                    <span className="text-sm">Think longer</span>
-                  </div>
-                  <div className="flex items-center gap-3 p-3 hover:bg-gray-700 rounded cursor-pointer">
-                    <Wifi className="h-4 w-4" />
-                    <span className="text-sm">Deep research</span>
-                  </div>
-                  <div className="flex items-center gap-3 p-3 hover:bg-gray-700 rounded cursor-pointer">
-                    <Wifi className="h-4 w-4" />
-                    <span className="text-sm">Web search</span>
-                  </div>
-                  <div className="flex items-center gap-3 p-3 hover:bg-gray-700 rounded cursor-pointer">
-                    <PaintBucket className="h-4 w-4" />
-                    <span className="text-sm">Canvas</span>
-                  </div>
-                </div>
-              )}
-            </div>
+            <ToolsDropdown onToggleGithubSearch={onToggleGithubSearch} />
 
             {/* Input field */}
             <ExpandablePromptInput
