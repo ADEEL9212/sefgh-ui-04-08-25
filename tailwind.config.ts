@@ -152,6 +152,14 @@ export default {
 					'100%': {
 						transform: 'translateX(0)'
 					}
+				},
+				'height-expand': {
+					'0%': {
+						height: '20px'
+					},
+					'100%': {
+						height: 'auto'
+					}
 				}
 			},
 			animation: {
@@ -161,7 +169,8 @@ export default {
 				'pulse-fast': 'pulse-fast 1s ease-in-out infinite',
 				'rainbow-shine': 'rainbow-shine 3s ease-in-out infinite',
 				'slide-in-left': 'slide-in-left 0.3s ease-out',
-				'slide-in-right': 'slide-in-right 0.3s ease-out'
+				'slide-in-right': 'slide-in-right 0.3s ease-out',
+				'height-expand': 'height-expand 0.2s ease-out'
 			},
 			backdropBlur: {
 				xs: '2px'

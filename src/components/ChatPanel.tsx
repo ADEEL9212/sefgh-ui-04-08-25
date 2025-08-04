@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
+import { ExpandablePromptInput } from '@/components/ExpandablePromptInput';
 import { Card, CardContent } from '@/components/ui/card';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { 
@@ -390,13 +391,12 @@ export const ChatPanel = ({
             </div>
 
             {/* Input field */}
-            <Textarea
+            <ExpandablePromptInput
               ref={inputRef}
               value={input}
-              onChange={(e) => setInput(e.target.value)}
+              onChange={setInput}
               placeholder="Ask anything"
-              className="flex-1 min-h-[20px] max-h-16 bg-transparent border-none focus:ring-0 focus:outline-none resize-none placeholder:text-gray-500 dark:placeholder:text-gray-400 text-sm flex items-center placeholder:animate-pulse py-1 leading-normal"
-              style={{ display: 'flex', alignItems: 'center' }}
+              className="placeholder:animate-pulse"
               onKeyDown={(e) => {
                 if (e.key === 'Enter' && !e.shiftKey) {
                   e.preventDefault();
