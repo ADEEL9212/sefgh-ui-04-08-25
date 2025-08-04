@@ -44,6 +44,7 @@ interface ChatPanelProps {
   onDeleteMessage: (id: string) => void;
   onRegenerateResponse: (id: string) => void;
   onToggleGithubSearch?: () => void;
+  onOpenCanvas?: () => void;
   isLoading: boolean;
   inputRef?: React.RefObject<HTMLTextAreaElement>;
 }
@@ -55,6 +56,7 @@ export const ChatPanel = ({
   onDeleteMessage,
   onRegenerateResponse,
   onToggleGithubSearch,
+  onOpenCanvas,
   isLoading,
   inputRef,
 }: ChatPanelProps) => {
@@ -378,7 +380,10 @@ export const ChatPanel = ({
             </Tooltip>
             
             {/* Tools dropdown */}
-            <ToolsDropdown onToggleGithubSearch={onToggleGithubSearch} />
+            <ToolsDropdown 
+              onToggleGithubSearch={onToggleGithubSearch} 
+              onOpenCanvas={onOpenCanvas}
+            />
 
             {/* Input field */}
             <ExpandablePromptInput

@@ -11,11 +11,13 @@ interface Tool {
 
 interface ToolsDropdownProps {
   onToggleGithubSearch?: () => void;
+  onOpenCanvas?: () => void;
   className?: string;
 }
 
 export const ToolsDropdown: React.FC<ToolsDropdownProps> = ({ 
   onToggleGithubSearch,
+  onOpenCanvas,
   className = ''
 }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -52,7 +54,7 @@ export const ToolsDropdown: React.FC<ToolsDropdownProps> = ({
       id: 'canvas',
       label: 'Canvas',
       icon: PenTool,
-      action: () => console.log('Canvas tool launched')
+      action: () => onOpenCanvas?.()
     }
   ];
 

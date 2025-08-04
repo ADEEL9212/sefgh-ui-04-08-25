@@ -9,6 +9,7 @@ import { LanguagePanel } from './panels/LanguagePanel';
 import { ConsolePanel } from './panels/ConsolePanel';
 import { ProxyPanel } from './panels/ProxyPanel';
 import { AllPagesPanel } from './panels/AllPagesPanel';
+import { CanvasPanel } from './CanvasPanel';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 
@@ -44,10 +45,19 @@ interface ProxySettings {
   requiresAuth: boolean;
 }
 
+interface CanvasData {
+  id: string;
+  title: string;
+  content: string;
+  mode: 'markdown' | 'code' | 'text';
+  lastModified: Date;
+}
+
 interface AppState {
   theme: 'light' | 'dark';
   isNavOpen: boolean;
   isSearchVisible: boolean;
+  isCanvasOpen: boolean;
   activeView: string;
   selectedVersion: string;
   selectedLanguage: string;
@@ -57,12 +67,15 @@ interface AppState {
   proxySettings: ProxySettings;
   isLoading: boolean;
   githubSearchQuery?: string;
+  currentCanvas: CanvasData | null;
+  hasUnsavedChanges: boolean;
 }
 
 const initialState: AppState = {
   theme: 'light',
   isNavOpen: false,
   isSearchVisible: false,
+  isCanvasOpen: false,
   activeView: 'chat',
   selectedVersion: 'v3',
   selectedLanguage: 'en',
@@ -79,6 +92,8 @@ const initialState: AppState = {
   },
   isLoading: false,
   githubSearchQuery: undefined,
+  currentCanvas: null,
+  hasUnsavedChanges: false,
 };
 
 export const SEFGHApp = () => {
@@ -335,6 +350,76 @@ export const SEFGHApp = () => {
     }, 100);
   }, [updateState]);
 
+  // Canvas handlers
+  const openCanvas = useCallback(() => {
+    if (!state.currentCanvas) {
+      const newCanvas: CanvasData = {
+        id: Math.random().toString(36).substr(2, 9),
+        title: 'Untitled Document',
+        content: '',
+        mode: 'markdown',
+        lastModified: new Date(),
+      };
+      updateState({ 
+        currentCanvas: newCanvas,
+        isCanvasOpen: true,
+        hasUnsavedChanges: false 
+      });
+    } else {
+      updateState({ isCanvasOpen: true });
+    }
+  }, [state.currentCanvas, updateState]);
+
+  const closeCanvas = useCallback(() => {
+    updateState({ isCanvasOpen: false });
+  }, [updateState]);
+
+  const saveCanvas = useCallback((canvas: CanvasData) => {
+    updateState({ 
+      currentCanvas: canvas,
+      hasUnsavedChanges: false 
+    });
+    
+    // Save to localStorage
+    const savedCanvases = JSON.parse(localStorage.getItem('sefgh-canvases') || '[]');
+    const existingIndex = savedCanvases.findIndex((c: CanvasData) => c.id === canvas.id);
+    
+    if (existingIndex >= 0) {
+      savedCanvases[existingIndex] = canvas;
+    } else {
+      savedCanvases.push(canvas);
+    }
+    
+    localStorage.setItem('sefgh-canvases', JSON.stringify(savedCanvases));
+  }, [updateState]);
+
+  const updateCanvasContent = useCallback((content: string) => {
+    if (state.currentCanvas) {
+      updateState({ 
+        currentCanvas: { ...state.currentCanvas, content },
+        hasUnsavedChanges: true 
+      });
+    }
+  }, [state.currentCanvas, updateState]);
+
+  const updateCanvasTitle = useCallback((title: string) => {
+    if (state.currentCanvas) {
+      updateState({ 
+        currentCanvas: { ...state.currentCanvas, title },
+        hasUnsavedChanges: true 
+      });
+    }
+  }, [state.currentCanvas, updateState]);
+
+  const updateCanvasMode = useCallback((mode: 'markdown' | 'code' | 'text') => {
+    if (state.currentCanvas) {
+      updateState({ 
+        currentCanvas: { ...state.currentCanvas, mode },
+        hasUnsavedChanges: true 
+      });
+    }
+  }, [state.currentCanvas, updateState]);
+
   const renderActivePanel = () => {
     switch (state.activeView) {
       case 'chat':
@@ -346,6 +431,7 @@ export const SEFGHApp = () => {
             onDeleteMessage={deleteMessage}
             onRegenerateResponse={regenerateResponse}
             onToggleGithubSearch={() => updateState({ isSearchVisible: !state.isSearchVisible })}
+            onOpenCanvas={openCanvas}
             isLoading={state.isLoading}
             inputRef={chatInputRef}
           />
@@ -458,6 +544,17 @@ export const SEFGHApp = () => {
             inputRef={searchInputRef}
             autoSearchQuery={state.githubSearchQuery}
             onQueryProcessed={() => updateState({ githubSearchQuery: undefined })}
+          />
+
+          <CanvasPanel
+            isOpen={state.isCanvasOpen}
+            canvas={state.currentCanvas}
+            hasUnsavedChanges={state.hasUnsavedChanges}
+            onClose={closeCanvas}
+            onSave={saveCanvas}
+            onContentChange={updateCanvasContent}
+            onTitleChange={updateCanvasTitle}
+            onModeChange={updateCanvasMode}
           />
         </div>
       </main>
