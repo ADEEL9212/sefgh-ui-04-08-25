@@ -127,9 +127,6 @@ export const ChatPanel = ({
     });
   };
 
-  const formatTimestamp = (date: Date) => {
-    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-  };
 
   const handleFileUpload = () => {
     fileInputRef.current?.click();
@@ -145,6 +142,30 @@ export const ChatPanel = ({
         duration: 3000,
       });
     }
+  };
+
+  const getMessageWidth = (content: string, type: 'user' | 'assistant') => {
+    const length = content.length;
+    const hasCodeBlock = content.includes('```') || content.includes('`');
+    const isList = content.includes('\n-') || content.includes('\n*') || content.includes('\n1.');
+    
+    // Code blocks and lists need more space
+    if (hasCodeBlock || isList) {
+      return 'max-w-[85%] sm:max-w-[90%]';
+    }
+    
+    // Dynamic sizing based on content length
+    if (length < 50) {
+      return 'max-w-[60%] sm:max-w-[65%] min-w-fit';
+    } else if (length < 200) {
+      return 'max-w-[70%] sm:max-w-[75%]';
+    } else {
+      return 'max-w-[85%] sm:max-w-[90%]';
+    }
+  };
+
+  const formatTimestamp = (timestamp: Date) => {
+    return timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   };
 
   const handleVoiceSearch = () => {
@@ -217,7 +238,7 @@ export const ChatPanel = ({
             </div>
 
             <Card className={`
-              flex-1 max-w-[80%]
+              flex-1 transition-all duration-200 ${getMessageWidth(message.content, message.type)}
               ${message.type === 'user' ? 'bg-brand text-brand-foreground' : ''}
             `}>
               <CardContent className="p-4">
