@@ -212,10 +212,21 @@ export const SEFGHApp = () => {
       timestamp: new Date(),
     };
 
+    // Check for Canvas trigger keywords
+    const canvasKeywords = ['note', 'canvas', 'write', 'edit', 'draft', 'document', 'create'];
+    const shouldOpenCanvas = canvasKeywords.some(keyword => 
+      content.toLowerCase().includes(keyword.toLowerCase())
+    );
+
     updateState({ 
       messages: [...state.messages, userMessage],
       isLoading: true,
     });
+
+    // If Canvas keywords detected, open Canvas with pre-filled content
+    if (shouldOpenCanvas && !state.isCanvasOpen) {
+      openCanvas('search-query', content);
+    }
 
     try {
       const response = await fetch('https://api.sefgh.org', {
@@ -351,19 +362,23 @@ export const SEFGHApp = () => {
   }, [updateState]);
 
   // Canvas handlers
-  const openCanvas = useCallback(() => {
+  const openCanvas = useCallback((type: 'blank' | 'search-query' = 'blank', queryContent?: string) => {
     if (!state.currentCanvas) {
       const newCanvas: CanvasData = {
         id: Math.random().toString(36).substr(2, 9),
-        title: 'Untitled Document',
-        content: '',
+        title: type === 'search-query' && queryContent 
+          ? `Draft on ${queryContent.substring(0, 30)}...`
+          : 'Untitled Document',
+        content: type === 'search-query' && queryContent 
+          ? `# ${queryContent}\n\n`
+          : '',
         mode: 'markdown',
         lastModified: new Date(),
       };
       updateState({ 
         currentCanvas: newCanvas,
         isCanvasOpen: true,
-        hasUnsavedChanges: false 
+        hasUnsavedChanges: type === 'search-query' 
       });
     } else {
       updateState({ isCanvasOpen: true });

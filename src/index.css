@@ -209,4 +209,85 @@ All colors MUST be HSL.
   .notification {
     @apply fixed top-4 right-4 z-50 animate-slide-in-right;
   }
+
+  /* Canvas Panel Animations */
+  .canvas-panel-enter {
+    transform: translateX(100%);
+    opacity: 0;
+    animation: canvas-slide-in 300ms ease-in-out forwards;
+  }
+
+  .canvas-panel-exit {
+    animation: canvas-slide-out 300ms ease-in-out forwards;
+  }
+
+  @keyframes canvas-slide-in {
+    from {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes canvas-slide-out {
+    from {
+      transform: translateX(0);
+      opacity: 1;
+    }
+    to {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+  }
+
+  /* Canvas Button Hover Effects */
+  .canvas-header-button {
+    @apply transition-all duration-150 ease-in-out;
+  }
+
+  .canvas-header-button:hover {
+    @apply scale-110;
+  }
+
+  /* Canvas Mode Button Active State */
+  .canvas-mode-active {
+    @apply bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300;
+  }
+
+  /* Canvas Backdrop */
+  .canvas-backdrop {
+    @apply fixed inset-0 bg-black/20 backdrop-blur-sm;
+    z-index: 49;
+    animation: backdrop-fade-in 200ms ease-out forwards;
+  }
+
+  @keyframes backdrop-fade-in {
+    from {
+      opacity: 0;
+      backdrop-filter: blur(0px);
+    }
+    to {
+      opacity: 1;
+      backdrop-filter: blur(4px);
+    }
+  }
+
+  /* Canvas Editor Styles */
+  .canvas-editor {
+    @apply bg-gray-50 dark:bg-gray-900/50;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06);
+  }
+
+  .canvas-editor::placeholder {
+    @apply text-gray-400;
+  }
+
+  /* Auto-resize textarea */
+  .canvas-editor-auto-resize {
+    resize: vertical;
+    min-height: 200px;
+  }
 }
