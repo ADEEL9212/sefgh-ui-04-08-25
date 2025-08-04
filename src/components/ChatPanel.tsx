@@ -341,6 +341,21 @@ export const ChatPanel = ({
       <div className="p-4">
         <form onSubmit={handleSubmit} className="relative">
           <div className="bg-gray-100 dark:bg-gray-700 rounded-2xl px-3 py-1 flex items-center gap-2">
+            {/* File Upload Button */}
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={handleFileUpload}
+                  className="h-8 w-8 rounded-full text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600 hover:scale-105 transition-all duration-200"
+                >
+                  <Plus className="h-4 w-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>Upload files or photos</TooltipContent>
+            </Tooltip>
+            
             {/* Tools dropdown */}
             <ToolsDropdown onToggleGithubSearch={onToggleGithubSearch} />
 
