@@ -424,7 +424,7 @@ export const ChatPanel = ({
           )}
 
           {/* Search input container */}
-          <div className="bg-slate-800 dark:bg-slate-900 rounded-xl px-4 py-3 flex items-center gap-3 border-2 border-slate-600 focus-within:border-blue-500 transition-colors">
+          <div className="bg-card border-2 border-border focus-within:border-ring rounded-xl px-4 py-3 flex items-center gap-3 transition-colors">
             {/* File Upload Button */}
             <Tooltip>
               <TooltipTrigger asChild>
