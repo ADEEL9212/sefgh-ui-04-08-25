@@ -25,7 +25,8 @@ import {
   Lightbulb,
   Wifi,
   PaintBucket,
-  ChevronDown
+  ChevronDown,
+  BookOpen
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
@@ -363,7 +364,66 @@ export const ChatPanel = ({
       {/* Input area */}
       <div className="p-4">
         <form onSubmit={handleSubmit} className="relative">
-          <div className="bg-gray-100 dark:bg-gray-700 rounded-2xl px-3 py-1 flex items-center gap-2">
+          {/* Tools panel - shows when tools button is clicked */}
+          {showToolsMenu && (
+            <div className="mb-3 bg-slate-800 dark:bg-slate-900 rounded-lg p-3 border border-slate-700">
+              <div className="space-y-2">
+                <div 
+                  className="flex items-center gap-3 p-2 rounded-lg hover:bg-slate-700 dark:hover:bg-slate-800 cursor-pointer transition-colors"
+                  onClick={() => {
+                    console.log('Study and Learn tool launched');
+                    setShowToolsMenu(false);
+                  }}
+                >
+                  <BookOpen className="h-4 w-4 text-slate-300" />
+                  <span className="text-sm text-slate-200">Study and Learn</span>
+                </div>
+                <div 
+                  className="flex items-center gap-3 p-2 rounded-lg hover:bg-slate-700 dark:hover:bg-slate-800 cursor-pointer transition-colors"
+                  onClick={() => {
+                    console.log('Think Longer tool launched');
+                    setShowToolsMenu(false);
+                  }}
+                >
+                  <Lightbulb className="h-4 w-4 text-slate-300" />
+                  <span className="text-sm text-slate-200">Think Longer</span>
+                </div>
+                <div 
+                  className="flex items-center gap-3 p-2 rounded-lg hover:bg-slate-700 dark:hover:bg-slate-800 cursor-pointer transition-colors"
+                  onClick={() => {
+                    console.log('Deep Research tool launched');
+                    setShowToolsMenu(false);
+                  }}
+                >
+                  <Settings className="h-4 w-4 text-slate-300" />
+                  <span className="text-sm text-slate-200">Deep Research</span>
+                </div>
+                <div 
+                  className="flex items-center gap-3 p-2 rounded-lg hover:bg-slate-700 dark:hover:bg-slate-800 cursor-pointer transition-colors"
+                  onClick={() => {
+                    console.log('Web Search tool launched');
+                    setShowToolsMenu(false);
+                  }}
+                >
+                  <Wifi className="h-4 w-4 text-slate-300" />
+                  <span className="text-sm text-slate-200">Web Search</span>
+                </div>
+                <div 
+                  className="flex items-center gap-3 p-2 rounded-lg hover:bg-slate-700 dark:hover:bg-slate-800 cursor-pointer transition-colors"
+                  onClick={() => {
+                    onOpenCanvas?.();
+                    setShowToolsMenu(false);
+                  }}
+                >
+                  <PaintBucket className="h-4 w-4 text-slate-300" />
+                  <span className="text-sm text-slate-200">Canvas</span>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Search input container */}
+          <div className="bg-slate-800 dark:bg-slate-900 rounded-xl px-4 py-3 flex items-center gap-3 border-2 border-slate-600 focus-within:border-blue-500 transition-colors">
             {/* File Upload Button */}
             <Tooltip>
               <TooltipTrigger asChild>
@@ -371,7 +431,7 @@ export const ChatPanel = ({
                   variant="ghost"
                   size="icon"
                   onClick={handleFileUpload}
-                  className="h-8 w-8 rounded-full text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600 hover:scale-105 transition-all duration-200"
+                  className="h-6 w-6 rounded-full text-slate-400 hover:text-slate-200 hover:bg-slate-700 transition-colors"
                 >
                   <Plus className="h-4 w-4" />
                 </Button>
@@ -379,11 +439,18 @@ export const ChatPanel = ({
               <TooltipContent>Upload files or photos</TooltipContent>
             </Tooltip>
             
-            {/* Tools dropdown */}
-            <ToolsDropdown 
-              onToggleGithubSearch={onToggleGithubSearch} 
-              onOpenCanvas={onOpenCanvas}
-            />
+            {/* Tools toggle button */}
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              onClick={() => setShowToolsMenu(!showToolsMenu)}
+              className={`text-slate-300 hover:text-white hover:bg-slate-700 rounded-lg px-2 py-1 text-sm transition-colors ${
+                showToolsMenu ? 'bg-slate-700 text-white' : ''
+              }`}
+            >
+              + Tools
+            </Button>
 
             {/* Input field */}
             <ExpandablePromptInput
@@ -391,7 +458,7 @@ export const ChatPanel = ({
               value={input}
               onChange={setInput}
               placeholder="Ask anything"
-              className="placeholder:animate-pulse"
+              className="flex-1 bg-transparent border-none text-slate-200 placeholder:text-slate-500 focus:outline-none"
               onKeyDown={(e) => {
                 if (e.key === 'Enter' && !e.shiftKey) {
                   e.preventDefault();
@@ -409,11 +476,11 @@ export const ChatPanel = ({
                     type="button"
                     variant="ghost"
                     size="icon"
-                    className={`h-8 w-8 rounded-full ${
+                    className={`h-6 w-6 rounded-full ${
                       isListening 
-                        ? 'text-primary animate-pulse' 
-                        : 'text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600'
-                    }`}
+                        ? 'text-blue-400 animate-pulse' 
+                        : 'text-slate-400 hover:text-slate-200 hover:bg-slate-700'
+                    } transition-colors`}
                     onClick={handleVoiceSearch}
                     disabled={isListening}
                   >
@@ -432,9 +499,9 @@ export const ChatPanel = ({
                     <Button 
                       type="submit" 
                       disabled={isLoading}
-                      className="h-8 w-8 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 p-0"
+                      className="h-6 w-6 rounded-full bg-blue-600 text-white hover:bg-blue-500 p-0 transition-colors"
                     >
-                      <Send className="h-4 w-4" />
+                      <Send className="h-3 w-3" />
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent>
