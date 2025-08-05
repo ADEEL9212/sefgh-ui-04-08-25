@@ -1,5 +1,6 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { 
   MessageSquare, 
   History, 
@@ -120,7 +121,8 @@ export const AllPagesPanel = ({ onNavigate }: AllPagesPanelProps) => {
   ];
 
   return (
-    <div className="p-6">
+    <ScrollArea className="h-full">
+      <div className="p-6">
       <div className="mb-8">
         <h1 className="text-3xl font-bold mb-2">Welcome to SEFGH-AI</h1>
         <p className="text-muted-foreground text-lg">
@@ -198,6 +200,7 @@ export const AllPagesPanel = ({ onNavigate }: AllPagesPanelProps) => {
           </div>
         </CardContent>
       </Card>
-    </div>
+      </div>
+    </ScrollArea>
   );
 };
