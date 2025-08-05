@@ -5,6 +5,7 @@ import SettingsNavigation from '@/components/github-settings/SettingsNavigation'
 import PublicProfileSettings from '@/components/github-settings/PublicProfileSettings';
 import AccountSettings from '@/components/github-settings/AccountSettings';
 import EmailSettings from '@/components/github-settings/EmailSettings';
+import AppearanceSettings from '@/components/github-settings/AppearanceSettings';
 
 const Settings = () => {
   const [activeItem, setActiveItem] = useState('public-profile');
@@ -31,17 +32,7 @@ const Settings = () => {
       case 'emails':
         return <EmailSettings />;
       case 'appearance':
-        return (
-          <div className="max-w-4xl space-y-6">
-            <div>
-              <h1 className="text-2xl font-semibold text-foreground mb-2">Appearance</h1>
-              <p className="text-muted-foreground">
-                Customize how GitHub looks and feels for you.
-              </p>
-            </div>
-            <p className="text-muted-foreground">Appearance settings coming soon...</p>
-          </div>
-        );
+        return <AppearanceSettings />;
       case 'accessibility':
         return (
           <div className="max-w-4xl space-y-6">
