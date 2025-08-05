@@ -1,196 +1,122 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
-import { 
-  ArrowLeft, 
-  Key,
-  TestTube,
-  Layers,
-  BarChart3,
-  Users,
-  Building,
-  UserCog,
-  Book,
-  Database,
-  FileText,
-  Beaker,
-  Settings as SettingsIcon,
-  MessageSquare,
-  RefreshCw,
-  Trash2
-} from 'lucide-react';
-
-// Import panel components
-import VirtualKeysPanel from '@/components/panels/VirtualKeysPanel';
-import TestKeyPanel from '@/components/panels/TestKeyPanel';
-import ModelsPanel from '@/components/panels/ModelsPanel';
-import UsagePanel from '@/components/panels/UsagePanel';
-import SettingsManagementPanel from '@/components/panels/SettingsManagementPanel';
+import GitHubHeader from '@/components/github-settings/GitHubHeader';
+import UserHeaderSection from '@/components/github-settings/UserHeaderSection';
+import SettingsNavigation from '@/components/github-settings/SettingsNavigation';
+import PublicProfileSettings from '@/components/github-settings/PublicProfileSettings';
+import AccountSettings from '@/components/github-settings/AccountSettings';
+import EmailSettings from '@/components/github-settings/EmailSettings';
+import AppearanceSettings from '@/components/github-settings/AppearanceSettings';
 
 const Settings = () => {
-  const navigate = useNavigate();
-  const [activeNavItem, setActiveNavItem] = useState('models');
+  const [activeItem, setActiveItem] = useState('public-profile');
+  const [expandedSections, setExpandedSections] = useState<string[]>([]);
 
-  const handleBackToChat = () => {
-    navigate('/');
+  const handleItemSelect = (itemId: string) => {
+    setActiveItem(itemId);
   };
 
-  const sidebarItems = [
-    { id: 'virtual-keys', label: 'Virtual Keys', icon: Key },
-    { id: 'test-key', label: 'Test Key', icon: TestTube },
-    { id: 'models', label: 'Models', icon: Layers },
-    { id: 'usage', label: 'Usage', icon: BarChart3 },
-    { id: 'teams', label: 'Teams', icon: Users },
-    { id: 'organizations', label: 'Organizations', icon: Building },
-    { id: 'internal-users', label: 'Internal Users', icon: UserCog },
-    { id: 'api-reference', label: 'API Reference', icon: Book },
-    { id: 'model-hub', label: 'Model Hub', icon: Database },
-    { id: 'logs', label: 'Logs', icon: FileText },
-    { id: 'experimental', label: 'Experimental', icon: Beaker },
-    { id: 'settings', label: 'Settings', icon: SettingsIcon },
-  ];
+  const handleToggleSection = (sectionId: string) => {
+    setExpandedSections(prev => 
+      prev.includes(sectionId) 
+        ? prev.filter(id => id !== sectionId)
+        : [...prev, sectionId]
+    );
+  };
 
-  const renderActivePanel = () => {
-    switch (activeNavItem) {
-      case 'virtual-keys':
-        return <VirtualKeysPanel />;
-      case 'test-key':
-        return <TestKeyPanel />;
-      case 'models':
-        return <ModelsPanel />;
-      case 'usage':
-        return <UsagePanel />;
-      case 'teams':
+  const renderActiveContent = () => {
+    switch (activeItem) {
+      case 'public-profile':
+        return <PublicProfileSettings />;
+      case 'account':
+        return <AccountSettings />;
+      case 'emails':
+        return <EmailSettings />;
+      case 'appearance':
+        return <AppearanceSettings />;
+      case 'accessibility':
         return (
-          <div className="space-y-6">
-            <h1 className="text-xl font-semibold">Teams</h1>
-            <p className="text-muted-foreground">Team management functionality coming soon...</p>
+          <div className="max-w-4xl space-y-6">
+            <div>
+              <h1 className="text-2xl font-semibold text-foreground mb-2">Accessibility</h1>
+              <p className="text-muted-foreground">
+                Manage settings to improve your GitHub experience.
+              </p>
+            </div>
+            <p className="text-muted-foreground">Accessibility settings coming soon...</p>
           </div>
         );
-      case 'organizations':
+      case 'notifications':
         return (
-          <div className="space-y-6">
-            <h1 className="text-xl font-semibold">Organizations</h1>
-            <p className="text-muted-foreground">Organization management functionality coming soon...</p>
+          <div className="max-w-4xl space-y-6">
+            <div>
+              <h1 className="text-2xl font-semibold text-foreground mb-2">Notifications</h1>
+              <p className="text-muted-foreground">
+                Choose how you receive notifications about activity on GitHub.
+              </p>
+            </div>
+            <p className="text-muted-foreground">Notification settings coming soon...</p>
           </div>
         );
-      case 'internal-users':
+      case 'billing':
         return (
-          <div className="space-y-6">
-            <h1 className="text-xl font-semibold">Internal Users</h1>
-            <p className="text-muted-foreground">User management functionality coming soon...</p>
+          <div className="max-w-4xl space-y-6">
+            <div>
+              <h1 className="text-2xl font-semibold text-foreground mb-2">Billing and licensing</h1>
+              <p className="text-muted-foreground">
+                Manage your GitHub billing and licensing.
+              </p>
+            </div>
+            <p className="text-muted-foreground">Billing settings coming soon...</p>
           </div>
         );
-      case 'api-reference':
+      case 'password':
         return (
-          <div className="space-y-6">
-            <h1 className="text-xl font-semibold">API Reference</h1>
-            <p className="text-muted-foreground">API documentation will be displayed here...</p>
+          <div className="max-w-4xl space-y-6">
+            <div>
+              <h1 className="text-2xl font-semibold text-foreground mb-2">Password and authentication</h1>
+              <p className="text-muted-foreground">
+                Manage your password and authentication settings.
+              </p>
+            </div>
+            <p className="text-muted-foreground">Password and authentication settings coming soon...</p>
           </div>
         );
-      case 'model-hub':
-        return (
-          <div className="space-y-6">
-            <h1 className="text-xl font-semibold">Model Hub</h1>
-            <p className="text-muted-foreground">Browse available models from different providers...</p>
-          </div>
-        );
-      case 'logs':
-        return (
-          <div className="space-y-6">
-            <h1 className="text-xl font-semibold">System Logs</h1>
-            <p className="text-muted-foreground">System logs and debugging information...</p>
-          </div>
-        );
-      case 'experimental':
-        return (
-          <div className="space-y-6">
-            <h1 className="text-xl font-semibold">Experimental Features</h1>
-            <p className="text-muted-foreground">Beta features and experimental functionality...</p>
-          </div>
-        );
-      case 'settings':
-        return <SettingsManagementPanel />;
       default:
-        return <ModelsPanel />;
+        return (
+          <div className="max-w-4xl space-y-6">
+            <div>
+              <h1 className="text-2xl font-semibold text-foreground mb-2">Settings</h1>
+              <p className="text-muted-foreground">
+                Select a settings category from the sidebar.
+              </p>
+            </div>
+          </div>
+        );
     }
   };
 
   return (
-    <div className="min-h-screen bg-background flex">
-      {/* Sidebar */}
-      <div className="w-64 bg-card border-r flex flex-col">
-        {/* Logo */}
-        <div className="p-4 border-b">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
-              <span className="text-white text-sm font-bold">S</span>
-            </div>
-            <span className="font-semibold text-lg">SEFGH-AI</span>
-          </div>
-        </div>
+    <div className="min-h-screen bg-background">
+      {/* GitHub Header */}
+      <GitHubHeader />
+      
+      {/* User Header Section */}
+      <UserHeaderSection />
 
-        {/* Navigation */}
-        <nav className="flex-1 p-4">
-          <div className="space-y-1">
-            {sidebarItems.map((item) => {
-              const Icon = item.icon;
-              const isActive = activeNavItem === item.id;
-              return (
-                <button
-                  key={item.id}
-                  onClick={() => setActiveNavItem(item.id)}
-                  className={`w-full flex items-center gap-3 px-3 py-2 text-sm rounded-md transition-colors ${
-                    isActive 
-                      ? 'bg-blue-100 text-blue-700 font-medium' 
-                      : 'text-muted-foreground hover:text-foreground hover:bg-muted'
-                  }`}
-                >
-                  <Icon className="h-4 w-4" />
-                  {item.label}
-                </button>
-              );
-            })}
-          </div>
-        </nav>
+      {/* Main Content Layout */}
+      <div className="flex">
+        {/* Navigation Sidebar */}
+        <SettingsNavigation
+          activeItem={activeItem}
+          onItemSelect={handleItemSelect}
+          expandedSections={expandedSections}
+          onToggleSection={handleToggleSection}
+        />
 
-        {/* User Section */}
-        <div className="p-4 border-t">
-          <div className="flex items-center gap-3">
-            <span className="text-sm text-muted-foreground">Docs</span>
-            <div className="flex items-center gap-2">
-              <span className="text-sm">User</span>
-              <button className="p-1">
-                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Main Content */}
-      <div className="flex-1 flex flex-col">
-        {/* Header */}
-        <div className="border-b bg-card/50 backdrop-blur-sm">
-          <div className="flex items-center justify-between p-4">
-            <div className="flex items-center gap-4">
-              <Button
-                onClick={handleBackToChat}
-                className="gap-2 bg-blue-600 hover:bg-blue-700 text-white"
-              >
-                <ArrowLeft className="h-4 w-4" />
-                Back to Chat
-              </Button>
-            </div>
-          </div>
-        </div>
-
-        {/* Content */}
-        <div className="flex-1 p-6">
-          {renderActivePanel()}
-        </div>
+        {/* Content Area */}
+        <main className="flex-1 p-8">
+          {renderActiveContent()}
+        </main>
       </div>
     </div>
   );
