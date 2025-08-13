@@ -29,6 +29,7 @@ interface AppHeaderProps {
   onNavToggle: () => void;
   onSearchToggle: () => void;
   onVersionChange: (version: string) => void;
+  onViewChange: (view: string) => void;
 }
 
 export const AppHeader = ({
@@ -38,6 +39,7 @@ export const AppHeader = ({
   onNavToggle,
   onSearchToggle,
   onVersionChange,
+  onViewChange,
 }: AppHeaderProps) => {
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
   const [isAccountSettingsOpen, setIsAccountSettingsOpen] = useState(false);
@@ -262,6 +264,7 @@ export const AppHeader = ({
               onOpenKeyboardShortcuts={() => {
                 setIsKeyboardShortcutsOpen(true);
               }}
+              onViewChange={onViewChange}
             />
           </div>
         </div>
