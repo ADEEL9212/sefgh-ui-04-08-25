@@ -69,62 +69,62 @@ All colors MUST be HSL.
   }
 
   .dark {
-    /* GitHub Dark Theme Colors */
-    --background: 220 13% 9%;  /* #0d1117 - GitHub primary background */
-    --foreground: 213 31% 91%; /* #e6edf3 - GitHub primary text */
+    /* Base colors - Dark Theme: #2F2A24, #ABBBC0, #FFFFFF */
+    --background: 33 19% 16%;  /* #2F2A24 */
+    --foreground: 0 0% 100%;   /* #FFFFFF */
 
     /* Surface colors */
-    --surface: 220 13% 11%;    /* #161b22 - GitHub secondary background */
-    --surface-elevated: 215 14% 14%; /* #21262d - GitHub elevated surfaces */
-    --surface-glass: 220 13% 9% / 0.8;
+    --surface: 33 19% 20%;     /* Slightly lighter than background */
+    --surface-elevated: 33 19% 24%; /* More elevated surfaces */
+    --surface-glass: 33 19% 16% / 0.8;
 
     /* Card colors */
-    --card: 220 13% 11%;       /* #161b22 - GitHub secondary background */
-    --card-foreground: 213 31% 91%; /* #e6edf3 - GitHub primary text */
+    --card: 33 19% 20%;        /* Slightly differentiated from background */
+    --card-foreground: 0 0% 100%; /* #FFFFFF */
 
     /* Popover colors */
-    --popover: 215 14% 14%;    /* #21262d - Elevated surface */
-    --popover-foreground: 213 31% 91%; /* #e6edf3 */
+    --popover: 33 19% 24%;     /* Elevated surface */
+    --popover-foreground: 0 0% 100%; /* #FFFFFF */
 
-    /* Brand colors - GitHub Blue */
-    --brand: 212 92% 45%;      /* #1f6feb - GitHub blue */
-    --brand-foreground: 0 0% 100%; /* White text on blue */
-    --brand-muted: 212 92% 45% / 0.1;
+    /* Brand colors - Using accent as brand */
+    --brand: 197 20% 71%;      /* #ABBBC0 */
+    --brand-foreground: 33 19% 16%; /* #2F2A24 for text on accent */
+    --brand-muted: 197 20% 71% / 0.1;
 
-    /* Primary colors - GitHub Blue for interactive elements */
-    --primary: 212 92% 45%;    /* #1f6feb - GitHub blue */
-    --primary-foreground: 0 0% 100%; /* White */
+    /* Primary colors - Using accent for interactive elements */
+    --primary: 197 20% 71%;    /* #ABBBC0 */
+    --primary-foreground: 33 19% 16%; /* #2F2A24 */
 
     /* Secondary colors */
-    --secondary: 220 13% 11%;  /* #161b22 - Secondary background */
-    --secondary-foreground: 213 31% 91%; /* #e6edf3 */
+    --secondary: 33 19% 20%;   /* Slightly lighter than background */
+    --secondary-foreground: 0 0% 100%; /* #FFFFFF */
 
     /* Muted colors */
-    --muted: 215 14% 14%;      /* #21262d - Slightly elevated */
-    --muted-foreground: 220 9% 46%; /* #8b949e - GitHub muted text */
+    --muted: 33 19% 20%;       /* Lighter variation */
+    --muted-foreground: 197 20% 71%; /* Secondary accent color */
 
     /* Accent colors */
-    --accent: 215 14% 14%;     /* #21262d - Hover states */
-    --accent-foreground: 213 31% 91%; /* #e6edf3 */
+    --accent: 197 20% 71%;     /* #ABBBC0 */
+    --accent-foreground: 33 19% 16%; /* #2F2A24 */
 
-    /* Destructive colors - GitHub Red */
-    --destructive: 4 90% 58%;  /* #f85149 - GitHub red */
+    /* Destructive colors */
+    --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
     /* Border and input */
-    --border: 215 28% 17%;     /* #30363d - GitHub border */
-    --input: 215 14% 14%;      /* #21262d - Input background */
-    --ring: 212 92% 45%;       /* #1f6feb - Focus ring */
+    --border: 0 0% 100% / 0.1;  /* White with low opacity */
+    --input: 33 19% 20%;       /* Muted background */
+    --ring: 197 20% 71%;       /* Accent color for focus rings */
 
     /* Sidebar colors */
-    --sidebar-background: 220 13% 11%; /* #161b22 */
-    --sidebar-foreground: 213 31% 91%; /* #e6edf3 */
-    --sidebar-primary: 212 92% 45%;    /* #1f6feb */
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 215 14% 14%;     /* #21262d */
-    --sidebar-accent-foreground: 213 31% 91%;
-    --sidebar-border: 215 28% 17%;     /* #30363d */
-    --sidebar-ring: 212 92% 45%;
+    --sidebar-background: 33 19% 20%; /* Slightly differentiated */
+    --sidebar-foreground: 0 0% 100%; /* #FFFFFF */
+    --sidebar-primary: 197 20% 71%;  /* #ABBBC0 */
+    --sidebar-primary-foreground: 33 19% 16%; /* #2F2A24 */
+    --sidebar-accent: 33 19% 24%;    /* Elevated */
+    --sidebar-accent-foreground: 0 0% 100%; /* #FFFFFF */
+    --sidebar-border: 0 0% 100% / 0.1;
+    --sidebar-ring: 197 20% 71%;
   }
 }
 
@@ -135,12 +135,6 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground font-sans;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-  }
-
-  /* Enable dark mode by default */
-  html {
-    @apply dark;
   }
 
   /* Custom scrollbar styles */
