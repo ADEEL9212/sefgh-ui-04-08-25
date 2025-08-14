@@ -15,19 +15,7 @@ import {
   Bot,
   Loader2,
   Plus,
-  Paperclip,
-  HardDrive,
-  Code,
   Mic,
-  Settings,
-  Github,
-  ImageIcon,
-  Lightbulb,
-  Wifi,
-  PaintBucket,
-  ChevronDown,
-  BookOpen,
-  Filter,
   X
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
@@ -71,7 +59,6 @@ export const ChatPanel = ({
   const [editingMessage, setEditingMessage] = useState<string | null>(null);
   const [editContent, setEditContent] = useState('');
   const [showAttachMenu, setShowAttachMenu] = useState(false);
-  const [showToolsMenu, setShowToolsMenu] = useState(false);
   const [isListening, setIsListening] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -90,16 +77,13 @@ export const ChatPanel = ({
       if (showAttachMenu && !(event.target as Element).closest('.attach-menu-container')) {
         setShowAttachMenu(false);
       }
-      if (showToolsMenu && !(event.target as Element).closest('.tools-menu-container')) {
-        setShowToolsMenu(false);
-      }
     };
 
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [showAttachMenu, showToolsMenu]);
+  }, [showAttachMenu]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -388,64 +372,6 @@ export const ChatPanel = ({
       {/* Input area */}
       <div className="p-4">
         <form onSubmit={handleSubmit} className="relative">
-          {/* Tools panel - shows when tools button is clicked */}
-          {showToolsMenu && (
-            <div className="mb-3 bg-slate-800 dark:bg-slate-900 rounded-lg p-3 border border-slate-700">
-              <div className="space-y-2">
-                <div 
-                  className="flex items-center gap-3 p-2 rounded-lg hover:bg-slate-700 dark:hover:bg-slate-800 cursor-pointer transition-colors"
-                  onClick={() => {
-                    console.log('Study and Learn tool launched');
-                    setShowToolsMenu(false);
-                  }}
-                >
-                  <BookOpen className="h-4 w-4 text-slate-300" />
-                  <span className="text-sm text-slate-200">Study and Learn</span>
-                </div>
-                <div 
-                  className="flex items-center gap-3 p-2 rounded-lg hover:bg-slate-700 dark:hover:bg-slate-800 cursor-pointer transition-colors"
-                  onClick={() => {
-                    console.log('Think Longer tool launched');
-                    setShowToolsMenu(false);
-                  }}
-                >
-                  <Lightbulb className="h-4 w-4 text-slate-300" />
-                  <span className="text-sm text-slate-200">Think Longer</span>
-                </div>
-                <div 
-                  className="flex items-center gap-3 p-2 rounded-lg hover:bg-slate-700 dark:hover:bg-slate-800 cursor-pointer transition-colors"
-                  onClick={() => {
-                    console.log('Deep Research tool launched');
-                    setShowToolsMenu(false);
-                  }}
-                >
-                  <Settings className="h-4 w-4 text-slate-300" />
-                  <span className="text-sm text-slate-200">Deep Research</span>
-                </div>
-                <div 
-                  className="flex items-center gap-3 p-2 rounded-lg hover:bg-slate-700 dark:hover:bg-slate-800 cursor-pointer transition-colors"
-                  onClick={() => {
-                    console.log('Web Search tool launched');
-                    setShowToolsMenu(false);
-                  }}
-                >
-                  <Wifi className="h-4 w-4 text-slate-300" />
-                  <span className="text-sm text-slate-200">Web Search</span>
-                </div>
-                <div 
-                  className="flex items-center gap-3 p-2 rounded-lg hover:bg-slate-700 dark:hover:bg-slate-800 cursor-pointer transition-colors"
-                  onClick={() => {
-                    onOpenCanvas?.();
-                    setShowToolsMenu(false);
-                  }}
-                >
-                  <PaintBucket className="h-4 w-4 text-slate-300" />
-                  <span className="text-sm text-slate-200">Canvas</span>
-                </div>
-              </div>
-            </div>
-          )}
-
           {/* Search input container */}
           <div className="bg-card border-2 border-border focus-within:border-ring rounded-xl px-4 py-3 flex items-center gap-3 transition-colors">
             {/* File Upload Button */}
@@ -463,19 +389,13 @@ export const ChatPanel = ({
               <TooltipContent>Upload files or photos</TooltipContent>
             </Tooltip>
             
-            {/* Tools toggle button */}
-            <Button
-              type="button"
-              variant="ghost"
-              size="sm"
-              onClick={() => setShowToolsMenu(!showToolsMenu)}
-              className={`flex items-center gap-2 text-slate-300 hover:text-white hover:bg-slate-700 rounded-lg px-2 py-1 text-sm transition-colors ${
-                showToolsMenu ? 'bg-slate-700 text-white' : ''
-              }`}
-            >
-              <Filter className="h-4 w-4" />
-              Tools
-            </Button>
+            {/* Tools dropdown */}
+            <ToolsDropdown
+              onToggleGithubSearch={onToggleGithubSearch}
+              onOpenCanvas={onOpenCanvas}
+              onFileUpload={handleFileUpload}
+              className="shrink-0"
+            />
 
             {/* Input field */}
             <ExpandablePromptInput
