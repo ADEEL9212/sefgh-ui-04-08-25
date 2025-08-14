@@ -27,7 +27,8 @@ import {
   PaintBucket,
   ChevronDown,
   BookOpen,
-  Filter
+  Filter,
+  X
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
@@ -47,7 +48,9 @@ interface ChatPanelProps {
   onRegenerateResponse: (id: string) => void;
   onToggleGithubSearch?: () => void;
   onOpenCanvas?: () => void;
+  onCancelMessage?: () => void;
   isLoading: boolean;
+  canCancelLoading?: boolean;
   inputRef?: React.RefObject<HTMLTextAreaElement>;
 }
 
@@ -59,7 +62,9 @@ export const ChatPanel = ({
   onRegenerateResponse,
   onToggleGithubSearch,
   onOpenCanvas,
+  onCancelMessage,
   isLoading,
+  canCancelLoading = false,
   inputRef,
 }: ChatPanelProps) => {
   const [input, setInput] = useState('');
@@ -346,9 +351,22 @@ export const ChatPanel = ({
             </div>
             <Card className="flex-1 max-w-[80%]">
               <CardContent className="p-3">
-                <div className="flex items-center gap-2">
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                  <span className="text-muted-foreground">AI is thinking...</span>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    <span className="text-muted-foreground">AI is thinking...</span>
+                  </div>
+                  {canCancelLoading && onCancelMessage && (
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={onCancelMessage}
+                      className="h-7 w-7 p-0 text-muted-foreground hover:text-foreground"
+                      title="Cancel request"
+                    >
+                      <X className="h-3 w-3" />
+                    </Button>
+                  )}
                 </div>
               </CardContent>
             </Card>

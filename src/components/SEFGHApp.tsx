@@ -66,6 +66,7 @@ interface AppState {
   consoleLogs: LogEntry[];
   proxySettings: ProxySettings;
   isLoading: boolean;
+  canCancelLoading: boolean;
   githubSearchQuery?: string;
   currentCanvas: CanvasData | null;
   hasUnsavedChanges: boolean;
@@ -91,6 +92,7 @@ const initialState: AppState = {
     requiresAuth: false,
   },
   isLoading: false,
+  canCancelLoading: false,
   githubSearchQuery: undefined,
   currentCanvas: null,
   hasUnsavedChanges: false,
@@ -101,6 +103,7 @@ export const SEFGHApp = () => {
   const { toast } = useToast();
   const searchInputRef = useRef<HTMLInputElement>(null);
   const chatInputRef = useRef<HTMLTextAreaElement>(null);
+  const currentAbortControllerRef = useRef<AbortController | null>(null);
 
   // Load state from localStorage on mount
   useEffect(() => {
@@ -215,7 +218,21 @@ export const SEFGHApp = () => {
     updateState({ 
       messages: [...state.messages, userMessage],
       isLoading: true,
+      canCancelLoading: false,
     });
+
+    // Create abort controller for timeout and cancellation
+    const abortController = new AbortController();
+    currentAbortControllerRef.current = abortController;
+    
+    // Enable cancellation after 5 seconds
+    const cancelTimeoutId = setTimeout(() => {
+      updateState(prev => ({ ...prev, canCancelLoading: true }));
+    }, 5000);
+    
+    const timeoutId = setTimeout(() => {
+      abortController.abort();
+    }, 20000); // 20 second timeout
 
     try {
       const response = await fetch('https://api.sefgh.org', {
@@ -224,10 +241,16 @@ export const SEFGHApp = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ message: content }),
+        signal: abortController.signal,
       });
 
+      // Clear timeouts if request completes
+      clearTimeout(timeoutId);
+      clearTimeout(cancelTimeoutId);
+      currentAbortControllerRef.current = null;
+
       if (!response.ok) {
-        throw new Error('API request failed');
+        throw new Error(`API request failed with status: ${response.status}`);
       }
 
       const data = await response.json();
@@ -266,6 +289,7 @@ export const SEFGHApp = () => {
       updateState({ 
         messages: [...state.messages, userMessage, assistantMessage],
         isLoading: false,
+        canCancelLoading: false,
         // If there's a query, open the GitHub search panel
         ...(shouldOpenGithubSearch && { 
           isSearchVisible: true,
@@ -274,21 +298,56 @@ export const SEFGHApp = () => {
       });
 
     } catch (error) {
+      // Clear timeouts if error occurs
+      clearTimeout(timeoutId);
+      clearTimeout(cancelTimeoutId);
+      currentAbortControllerRef.current = null;
+      
       console.error('API Error:', error);
       
-      const errorMessage: Message = {
+      let errorMessage = 'Sorry, I encountered an error while processing your request. Please try again later.';
+      
+      // Handle specific error types
+      if (error instanceof Error) {
+        if (error.name === 'AbortError') {
+          errorMessage = 'Request timed out. The AI service may be busy. Please try again.';
+        } else if (error.message.includes('Failed to fetch')) {
+          errorMessage = 'Unable to connect to the AI service. Please check your internet connection and try again.';
+        }
+      }
+      
+      const errorResponseMessage: Message = {
         id: Math.random().toString(36).substr(2, 9),
         type: 'assistant',
-        content: 'Sorry, I encountered an error while processing your request. Please try again later.',
+        content: errorMessage,
         timestamp: new Date(),
       };
 
       updateState({ 
-        messages: [...state.messages, userMessage, errorMessage],
+        messages: [...state.messages, userMessage, errorResponseMessage],
         isLoading: false,
+        canCancelLoading: false,
       });
     }
   }, [state.messages, updateState]);
+
+  const cancelMessage = useCallback(() => {
+    if (currentAbortControllerRef.current) {
+      currentAbortControllerRef.current.abort();
+      currentAbortControllerRef.current = null;
+    }
+    
+    updateState({ 
+      isLoading: false,
+      canCancelLoading: false,
+    });
+    
+    toast({
+      title: "Request cancelled",
+      description: "The AI request has been cancelled.",
+      duration: 2000,
+    });
+  }, [updateState, toast]);
 
   const editMessage = useCallback((messageId: string, newContent: string) => {
     const messageIndex = state.messages.findIndex(msg => msg.id === messageId);
@@ -432,7 +491,9 @@ export const SEFGHApp = () => {
             onRegenerateResponse={regenerateResponse}
             onToggleGithubSearch={() => updateState({ isSearchVisible: !state.isSearchVisible })}
             onOpenCanvas={openCanvas}
+            onCancelMessage={cancelMessage}
             isLoading={state.isLoading}
+            canCancelLoading={state.canCancelLoading}
             inputRef={chatInputRef}
           />
         );
