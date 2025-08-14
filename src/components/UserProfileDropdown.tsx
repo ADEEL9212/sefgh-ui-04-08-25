@@ -104,17 +104,6 @@ export const UserProfileDropdown = ({
               <span className="text-muted-foreground text-sm ml-auto">@{currentUser.email.split('@')[0]}</span>
             </Button>
 
-            <Button
-              variant="ghost"
-              className="w-full justify-start gap-3 hover:bg-accent"
-              onClick={() => {
-                navigate('/settings');
-                onClose();
-              }}
-            >
-              <Settings className="h-4 w-4" />
-              <span>System settings</span>
-            </Button>
 
             <Button
               variant="ghost"

@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Filter, BookOpen, Lightbulb, Brain, Globe, PenTool, ChevronDown } from 'lucide-react';
+import { Filter, BookOpen, Lightbulb, Brain, Globe, PenTool, ChevronDown, Settings } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from './ui/button';
 
 interface Tool {
@@ -20,6 +21,7 @@ export const ToolsDropdown: React.FC<ToolsDropdownProps> = ({
   onOpenCanvas,
   className = ''
 }) => {
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [focusedIndex, setFocusedIndex] = useState(-1);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -55,6 +57,12 @@ export const ToolsDropdown: React.FC<ToolsDropdownProps> = ({
       label: 'Canvas',
       icon: PenTool,
       action: () => onOpenCanvas?.()
+    },
+    {
+      id: 'system-settings',
+      label: 'System Settings',
+      icon: Settings,
+      action: () => navigate('/settings')
     }
   ];
 
