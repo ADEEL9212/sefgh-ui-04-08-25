@@ -152,19 +152,24 @@ export const ChatPanel = ({
     const length = content.length;
     const hasCodeBlock = content.includes('```') || content.includes('`');
     const isList = content.includes('\n-') || content.includes('\n*') || content.includes('\n1.');
+    const lineCount = content.split('\n').length;
     
-    // Code blocks and lists need more space
+    // Code blocks and lists need more space but still constrained
     if (hasCodeBlock || isList) {
-      return 'max-w-[85%] sm:max-w-[90%]';
+      return 'max-w-[75%] sm:max-w-[80%]';
     }
     
-    // Dynamic sizing based on content length
-    if (length < 50) {
-      return 'max-w-[60%] sm:max-w-[65%] min-w-fit';
-    } else if (length < 200) {
+    // Very dynamic sizing based on content length and structure
+    if (length < 30) {
+      return 'max-w-[40%] sm:max-w-[45%] min-w-fit';
+    } else if (length < 80) {
+      return 'max-w-[50%] sm:max-w-[55%]';
+    } else if (length < 150) {
+      return 'max-w-[60%] sm:max-w-[65%]';
+    } else if (length < 300) {
       return 'max-w-[70%] sm:max-w-[75%]';
     } else {
-      return 'max-w-[85%] sm:max-w-[90%]';
+      return 'max-w-[75%] sm:max-w-[80%]';
     }
   };
 
@@ -245,7 +250,7 @@ export const ChatPanel = ({
               flex-1 transition-all duration-200 ${getMessageWidth(message.content, message.type)}
               ${message.type === 'user' ? 'bg-brand text-brand-foreground' : ''}
             `}>
-              <CardContent className="p-4">
+              <CardContent className="p-3">
                 {editingMessage === message.id ? (
                   <div className="space-y-3">
                     <Textarea
@@ -340,7 +345,7 @@ export const ChatPanel = ({
               <Bot className="h-4 w-4 text-muted-foreground" />
             </div>
             <Card className="flex-1 max-w-[80%]">
-              <CardContent className="p-4">
+              <CardContent className="p-3">
                 <div className="flex items-center gap-2">
                   <Loader2 className="h-4 w-4 animate-spin" />
                   <span className="text-muted-foreground">AI is thinking...</span>
