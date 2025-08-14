@@ -40,7 +40,6 @@ interface UserProfileDropdownProps {
   onOpenSettings: () => void;
   onOpenDeviceManagement: () => void;
   onOpenKeyboardShortcuts?: () => void;
-  onViewChange: (view: string) => void;
 }
 
 export const UserProfileDropdown = ({
@@ -55,7 +54,6 @@ export const UserProfileDropdown = ({
   onOpenSettings,
   onOpenDeviceManagement,
   onOpenKeyboardShortcuts,
-  onViewChange,
 }: UserProfileDropdownProps) => {
   const navigate = useNavigate();
   const [isHelpOpen, setIsHelpOpen] = useState(false);
@@ -110,7 +108,7 @@ export const UserProfileDropdown = ({
               variant="ghost"
               className="w-full justify-start gap-3 hover:bg-accent"
               onClick={() => {
-                onViewChange('settings');
+                navigate('/settings');
                 onClose();
               }}
             >

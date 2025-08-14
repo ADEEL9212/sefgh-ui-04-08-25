@@ -12,7 +12,6 @@ import { AllPagesPanel } from './panels/AllPagesPanel';
 import { CanvasPanel } from './CanvasPanel';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
-import AccountSettingsPanel from './panels/AccountSettingsPanel';
 
 interface Message {
   id: string;
@@ -486,15 +485,9 @@ export const SEFGHApp = () => {
         );
       case 'all-pages':
         return <AllPagesPanel onNavigate={setActiveView} />;
-      case 'settings':
-        return (
-          <AccountSettingsPanel
-            isOpen={true}
-            onClose={() => updateState({ activeView: 'chat' })}
-          />
-        );
       case 'docs':
       case 'playground':
+      case 'settings':
         return (
           <Card className="m-6">
             <CardHeader>
@@ -528,7 +521,6 @@ export const SEFGHApp = () => {
             duration: 2000,
           });
         }}
-        onViewChange={setActiveView}
       />
 
       <main className="flex-1 flex pt-14 overflow-hidden">
