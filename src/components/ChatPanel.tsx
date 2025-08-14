@@ -177,6 +177,20 @@ export const ChatPanel = ({
     return timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   };
 
+  const shouldShowAvatar = (messageIndex: number, messages: Message[]) => {
+    if (messageIndex === 0) return true;
+    const currentMessage = messages[messageIndex];
+    const previousMessage = messages[messageIndex - 1];
+    return currentMessage.type !== previousMessage.type;
+  };
+
+  const getMessageGroupClass = (messageIndex: number, messages: Message[]) => {
+    if (messageIndex === 0) return '';
+    const currentMessage = messages[messageIndex];
+    const previousMessage = messages[messageIndex - 1];
+    return currentMessage.type === previousMessage.type ? 'mt-1' : 'mt-2';
+  };
+
   const handleVoiceSearch = () => {
     const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     
@@ -217,7 +231,7 @@ export const ChatPanel = ({
   return (
     <div className="flex flex-col h-full">
       {/* Messages area */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+      <div className="flex-1 overflow-y-auto chat-container-compact chat-message-spacing">
         {messages.length === 0 && (
           <div className="text-center py-12">
             <Bot className="h-16 w-16 mx-auto mb-4 text-muted-foreground" />
@@ -228,29 +242,38 @@ export const ChatPanel = ({
           </div>
         )}
 
-        {messages.map((message) => (
+        {messages.map((message, index) => (
           <div
             key={message.id}
-            className={`message-bubble flex gap-3 group ${
+            className={`message-bubble flex gap-2 group ${
               message.type === 'user' ? 'flex-row-reverse' : ''
-            }`}
+            } ${getMessageGroupClass(index, messages)}`}
           >
-            <div className={`
-              w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0
-              ${message.type === 'user' ? 'bg-brand' : 'bg-muted'}
-            `}>
-              {message.type === 'user' ? (
-                <User className="h-4 w-4 text-brand-foreground" />
-              ) : (
-                <Bot className="h-4 w-4 text-muted-foreground" />
-              )}
-            </div>
+            {/* Avatar - show only for first message in sequence */}
+            {shouldShowAvatar(index, messages) ? (
+              <div className={`
+                chat-avatar-small rounded-full flex items-center justify-center flex-shrink-0
+                ${message.type === 'user' ? 'bg-brand' : 'bg-muted'}
+              `}>
+                {message.type === 'user' ? (
+                  <User className="text-brand-foreground" />
+                ) : (
+                  <Bot className="text-muted-foreground" />
+                )}
+              </div>
+            ) : (
+              <div className="chat-avatar-small flex-shrink-0"></div>
+            )}
 
             <Card className={`
               flex-1 transition-all duration-200 ${getMessageWidth(message.content, message.type)}
-              ${message.type === 'user' ? 'bg-brand text-brand-foreground' : ''}
+              chat-bubble-compact
+              ${message.type === 'user' 
+                ? 'chat-bubble-user-subtle text-foreground' 
+                : 'chat-bubble-assistant-subtle'
+              }
             `}>
-              <CardContent className="p-3">
+              <CardContent className="card-content-compact">
                 {editingMessage === message.id ? (
                   <div className="space-y-3">
                     <Textarea
@@ -280,36 +303,36 @@ export const ChatPanel = ({
                     <div className="whitespace-pre-wrap break-words">
                       {message.content}
                     </div>
-                    <div className={`flex items-center mt-3 pt-3 ${
+                    <div className={`flex items-center mt-2 pt-1 ${
                       message.type === 'user' ? 'justify-end' : 'justify-between'
                     }`}>
                       {message.type === 'assistant' && (
-                        <span className="text-xs opacity-70">
+                        <span className="chat-timestamp-subtle">
                           {formatTimestamp(message.timestamp)}
                         </span>
                       )}
                       {message.type === 'user' && (
-                        <span className="text-xs opacity-70 mr-2">
+                        <span className="chat-timestamp-subtle mr-1">
                           {formatTimestamp(message.timestamp)}
                         </span>
                       )}
-                      <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <div className="flex gap-0.5 chat-action-buttons-compact">
                         <Button
                           size="sm"
                           variant="ghost"
                           onClick={() => copyToClipboard(message.content)}
-                          className="h-7 w-7 p-0"
+                          className="chat-action-button-small"
                         >
-                          <Copy className="h-3 w-3" />
+                          <Copy />
                         </Button>
                         {message.type === 'user' && (
                           <Button
                             size="sm"
                             variant="ghost"
                             onClick={() => handleEdit(message.id, message.content)}
-                            className="h-7 w-7 p-0"
+                            className="chat-action-button-small"
                           >
-                            <Edit3 className="h-3 w-3" />
+                            <Edit3 />
                           </Button>
                         )}
                         {message.type === 'assistant' && (
@@ -317,18 +340,18 @@ export const ChatPanel = ({
                             size="sm"
                             variant="ghost"
                             onClick={() => onRegenerateResponse(message.id)}
-                            className="h-7 w-7 p-0"
+                            className="chat-action-button-small"
                           >
-                            <RotateCcw className="h-3 w-3" />
+                            <RotateCcw />
                           </Button>
                         )}
                         <Button
                           size="sm"
                           variant="ghost"
                           onClick={() => onDeleteMessage(message.id)}
-                          className="h-7 w-7 p-0 text-destructive hover:text-destructive"
+                          className="chat-action-button-small text-destructive hover:text-destructive"
                         >
-                          <Trash2 className="h-3 w-3" />
+                          <Trash2 />
                         </Button>
                       </div>
                     </div>
@@ -340,12 +363,12 @@ export const ChatPanel = ({
         ))}
 
         {isLoading && (
-          <div className="flex gap-3">
-            <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center">
-              <Bot className="h-4 w-4 text-muted-foreground" />
+          <div className="flex gap-2">
+            <div className="chat-avatar-small rounded-full bg-muted flex items-center justify-center">
+              <Bot className="text-muted-foreground" />
             </div>
-            <Card className="flex-1 max-w-[80%]">
-              <CardContent className="p-3">
+            <Card className="flex-1 max-w-[80%] chat-bubble-compact chat-bubble-assistant-subtle">
+              <CardContent className="card-content-compact">
                 <div className="flex items-center gap-2">
                   <Loader2 className="h-4 w-4 animate-spin" />
                   <span className="text-muted-foreground">AI is thinking...</span>
@@ -368,7 +391,7 @@ export const ChatPanel = ({
       />
 
       {/* Input area */}
-      <div className="p-4">
+      <div className="chat-container-compact">
         <form onSubmit={handleSubmit} className="relative">
           {/* Tools panel - shows when tools button is clicked */}
           {showToolsMenu && (

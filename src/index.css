@@ -190,6 +190,61 @@ All colors MUST be HSL.
     @apply animate-fade-in-up;
   }
 
+  /* Compact chat styling */
+  .chat-bubble-compact {
+    @apply rounded-md border-0 shadow-sm;
+    border-radius: 0.25rem; /* 4px radius for subtle corners */
+  }
+
+  .chat-bubble-compact .card-content-compact {
+    @apply p-2; /* Reduced from p-3 to p-2 */
+  }
+
+  .chat-message-group {
+    @apply space-y-1; /* Tight spacing for consecutive messages */
+  }
+
+  .chat-message-spacing {
+    @apply space-y-2; /* Reduced from space-y-4 to space-y-2 (50% reduction) */
+  }
+
+  .chat-container-compact {
+    @apply p-2; /* Reduced from p-4 to p-2 */
+  }
+
+  .chat-timestamp-subtle {
+    @apply text-xs opacity-60; /* 12px font, 60% opacity */
+  }
+
+  .chat-action-buttons-compact {
+    @apply opacity-0 group-hover:opacity-100 transition-opacity duration-200;
+  }
+
+  .chat-action-button-small {
+    @apply h-6 w-6 p-0; /* Reduced from h-7 w-7 (15% smaller) */
+  }
+
+  .chat-action-button-small svg {
+    @apply h-2.5 w-2.5; /* Reduced from h-3 w-3 */
+  }
+
+  .chat-avatar-small {
+    @apply w-6 h-6; /* Reduced from w-8 h-8 (25% smaller) */
+  }
+
+  .chat-avatar-small svg {
+    @apply h-3 w-3; /* Reduced from h-4 w-4 */
+  }
+
+  /* More subtle color differences */
+  .chat-bubble-user-subtle {
+    @apply border border-brand/20 bg-brand/5;
+  }
+
+  .chat-bubble-assistant-subtle {
+    @apply border border-muted bg-card;
+  }
+
   /* Loading skeleton */
   .skeleton {
     @apply bg-muted animate-pulse-fast rounded;
