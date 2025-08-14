@@ -113,7 +113,7 @@ export const UserProfileDropdown = ({
               }}
             >
               <Settings className="h-4 w-4" />
-              <span>Account settings</span>
+              <span>System settings</span>
             </Button>
 
             <Button
