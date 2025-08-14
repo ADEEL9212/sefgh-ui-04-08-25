@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { 
@@ -34,6 +35,7 @@ export const NavigationPanel = ({
   onThemeToggle,
   onClose,
 }: NavigationPanelProps) => {
+  const navigate = useNavigate();
   const navigationItems = [
     { id: 'chat', label: 'New Chat', icon: MessageSquare, description: 'Start a new AI conversation' },
     { id: 'history', label: 'Chat History', icon: History, description: 'View previous chat sessions' },
@@ -120,7 +122,7 @@ export const NavigationPanel = ({
                   className="w-full justify-start gap-3"
                   onClick={() => {
                     if (item.id === 'settings') {
-                      window.location.href = '/settings';
+                      navigate('/settings');
                     } else {
                       onViewChange(item.id);
                     }
