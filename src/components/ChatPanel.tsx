@@ -23,12 +23,15 @@ import {
   Github,
   ImageIcon,
   Lightbulb,
-  Wifi,
+  Globe,
   PaintBucket,
   ChevronDown,
+  ChevronRight,
   BookOpen,
   Filter,
-  X
+  X,
+  Search,
+  MoreHorizontal
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
@@ -72,6 +75,7 @@ export const ChatPanel = ({
   const [editContent, setEditContent] = useState('');
   const [showAttachMenu, setShowAttachMenu] = useState(false);
   const [showToolsMenu, setShowToolsMenu] = useState(false);
+  const [showMoreMenu, setShowMoreMenu] = useState(false);
   const [isListening, setIsListening] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -92,6 +96,7 @@ export const ChatPanel = ({
       }
       if (showToolsMenu && !(event.target as Element).closest('.tools-menu-container')) {
         setShowToolsMenu(false);
+        setShowMoreMenu(false);
       }
     };
 
@@ -390,57 +395,137 @@ export const ChatPanel = ({
         <form onSubmit={handleSubmit} className="relative">
           {/* Tools panel - shows when tools button is clicked */}
           {showToolsMenu && (
-            <div className="mb-3 bg-slate-800 dark:bg-slate-900 rounded-lg p-3 border border-slate-700">
-              <div className="space-y-2">
-                <div 
-                  className="flex items-center gap-3 p-2 rounded-lg hover:bg-slate-700 dark:hover:bg-slate-800 cursor-pointer transition-colors"
-                  onClick={() => {
-                    console.log('Study and Learn tool launched');
-                    setShowToolsMenu(false);
-                  }}
-                >
-                  <BookOpen className="h-4 w-4 text-slate-300" />
-                  <span className="text-sm text-slate-200">Study and Learn</span>
-                </div>
-                <div 
-                  className="flex items-center gap-3 p-2 rounded-lg hover:bg-slate-700 dark:hover:bg-slate-800 cursor-pointer transition-colors"
-                  onClick={() => {
-                    console.log('Think Longer tool launched');
-                    setShowToolsMenu(false);
-                  }}
-                >
-                  <Lightbulb className="h-4 w-4 text-slate-300" />
-                  <span className="text-sm text-slate-200">Think Longer</span>
-                </div>
-                <div 
-                  className="flex items-center gap-3 p-2 rounded-lg hover:bg-slate-700 dark:hover:bg-slate-800 cursor-pointer transition-colors"
-                  onClick={() => {
-                    console.log('Deep Research tool launched');
-                    setShowToolsMenu(false);
-                  }}
-                >
-                  <Settings className="h-4 w-4 text-slate-300" />
-                  <span className="text-sm text-slate-200">Deep Research</span>
-                </div>
-                <div 
-                  className="flex items-center gap-3 p-2 rounded-lg hover:bg-slate-700 dark:hover:bg-slate-800 cursor-pointer transition-colors"
-                  onClick={() => {
-                    console.log('Web Search tool launched');
-                    setShowToolsMenu(false);
-                  }}
-                >
-                  <Wifi className="h-4 w-4 text-slate-300" />
-                  <span className="text-sm text-slate-200">Web Search</span>
-                </div>
-                <div 
-                  className="flex items-center gap-3 p-2 rounded-lg hover:bg-slate-700 dark:hover:bg-slate-800 cursor-pointer transition-colors"
-                  onClick={() => {
-                    onOpenCanvas?.();
-                    setShowToolsMenu(false);
-                  }}
-                >
-                  <PaintBucket className="h-4 w-4 text-slate-300" />
-                  <span className="text-sm text-slate-200">Canvas</span>
+            <div className="tools-menu-container relative">
+              <div className="mb-3 bg-gray-900 dark:bg-gray-800 text-white rounded-xl shadow-2xl p-4 border border-gray-700" 
+                   style={{ boxShadow: '0 8px 24px rgba(0,0,0,0.2)' }}>
+                <div className="space-y-1">
+                  {/* Add photos & files */}
+                  <div 
+                    className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-700 dark:hover:bg-gray-600 cursor-pointer transition-all duration-150"
+                    onClick={() => {
+                      handleFileUpload();
+                      setShowToolsMenu(false);
+                    }}
+                  >
+                    <Paperclip className="h-5 w-5 text-gray-300" />
+                    <span className="text-sm font-medium text-gray-200">Add photos & files</span>
+                  </div>
+                  
+                  {/* Separator */}
+                  <div className="h-px bg-gray-600 my-2"></div>
+                  
+                  {/* Study and Learn */}
+                  <div 
+                    className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-700 dark:hover:bg-gray-600 cursor-pointer transition-all duration-150"
+                    onClick={() => {
+                      console.log('Study and Learn tool launched');
+                      setShowToolsMenu(false);
+                    }}
+                  >
+                    <BookOpen className="h-5 w-5 text-gray-300" />
+                    <span className="text-sm font-medium text-gray-200">Study and learn</span>
+                  </div>
+                  
+                  {/* Think Longer */}
+                  <div 
+                    className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-700 dark:hover:bg-gray-600 cursor-pointer transition-all duration-150"
+                    onClick={() => {
+                      console.log('Think Longer tool launched');
+                      setShowToolsMenu(false);
+                    }}
+                  >
+                    <Lightbulb className="h-5 w-5 text-gray-300" />
+                    <span className="text-sm font-medium text-gray-200">Think longer</span>
+                  </div>
+                  
+                  {/* Deep Research */}
+                  <div 
+                    className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-700 dark:hover:bg-gray-600 cursor-pointer transition-all duration-150"
+                    onClick={() => {
+                      console.log('Deep Research tool launched');
+                      setShowToolsMenu(false);
+                    }}
+                  >
+                    <Search className="h-5 w-5 text-gray-300" />
+                    <span className="text-sm font-medium text-gray-200">Deep research</span>
+                  </div>
+                  
+                  {/* Separator */}
+                  <div className="h-px bg-gray-600 my-2"></div>
+                  
+                  {/* GitHub search */}
+                  <div 
+                    className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-700 dark:hover:bg-gray-600 cursor-pointer transition-all duration-150"
+                    onClick={() => {
+                      onToggleGithubSearch?.();
+                      setShowToolsMenu(false);
+                    }}
+                  >
+                    <Github className="h-5 w-5 text-gray-300" />
+                    <span className="text-sm font-medium text-gray-200">GitHub search</span>
+                  </div>
+                  
+                  {/* Gitee search */}
+                  <div 
+                    className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-700 dark:hover:bg-gray-600 cursor-pointer transition-all duration-150"
+                    onClick={() => {
+                      console.log('Gitee search tool launched');
+                      setShowToolsMenu(false);
+                    }}
+                  >
+                    <Code className="h-5 w-5 text-gray-300" />
+                    <span className="text-sm font-medium text-gray-200">Gitee search</span>
+                  </div>
+                  
+                  {/* Separator */}
+                  <div className="h-px bg-gray-600 my-2"></div>
+                  
+                  {/* More menu */}
+                  <div 
+                    className="flex items-center justify-between gap-3 p-3 rounded-lg hover:bg-gray-700 dark:hover:bg-gray-600 cursor-pointer transition-all duration-150 relative"
+                    onMouseEnter={() => setShowMoreMenu(true)}
+                    onMouseLeave={() => setShowMoreMenu(false)}
+                  >
+                    <div className="flex items-center gap-3">
+                      <MoreHorizontal className="h-5 w-5 text-gray-300" />
+                      <span className="text-sm font-medium text-gray-200">More</span>
+                    </div>
+                    <ChevronRight className="h-4 w-4 text-gray-400" />
+                    
+                    {/* Secondary dropdown panel */}
+                    {showMoreMenu && (
+                      <div className="absolute left-full top-0 ml-2 bg-gray-900 dark:bg-gray-800 text-white rounded-xl shadow-2xl p-4 w-48 z-50"
+                           style={{ boxShadow: '0 8px 24px rgba(0,0,0,0.2)' }}>
+                        <div className="space-y-1">
+                          {/* Web Search */}
+                          <div 
+                            className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-700 dark:hover:bg-gray-600 cursor-pointer transition-all duration-150"
+                            onClick={() => {
+                              console.log('Web Search tool launched');
+                              setShowToolsMenu(false);
+                              setShowMoreMenu(false);
+                            }}
+                          >
+                            <Globe className="h-5 w-5 text-gray-300" />
+                            <span className="text-sm font-medium text-gray-200">Web search</span>
+                          </div>
+                          
+                          {/* Canvas */}
+                          <div 
+                            className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-700 dark:hover:bg-gray-600 cursor-pointer transition-all duration-150"
+                            onClick={() => {
+                              onOpenCanvas?.();
+                              setShowToolsMenu(false);
+                              setShowMoreMenu(false);
+                            }}
+                          >
+                            <PaintBucket className="h-5 w-5 text-gray-300" />
+                            <span className="text-sm font-medium text-gray-200">Canvas</span>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
@@ -474,7 +559,7 @@ export const ChatPanel = ({
               }`}
             >
               <Filter className="h-4 w-4" />
-              Tools
+              + Tools
             </Button>
 
             {/* Input field */}
