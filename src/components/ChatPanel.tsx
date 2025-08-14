@@ -188,7 +188,8 @@ export const ChatPanel = ({
     if (messageIndex === 0) return '';
     const currentMessage = messages[messageIndex];
     const previousMessage = messages[messageIndex - 1];
-    return currentMessage.type === previousMessage.type ? 'mt-1' : 'mt-2';
+    // Tighter spacing for consecutive messages from same user
+    return currentMessage.type === previousMessage.type ? 'mt-0.5' : 'mt-3';
   };
 
   const handleVoiceSearch = () => {

@@ -192,28 +192,30 @@ All colors MUST be HSL.
 
   /* Compact chat styling */
   .chat-bubble-compact {
-    @apply rounded-md border-0 shadow-sm;
+    @apply rounded border-0 shadow-sm;
     border-radius: 0.25rem; /* 4px radius for subtle corners */
   }
 
   .chat-bubble-compact .card-content-compact {
-    @apply p-2; /* Reduced from p-3 to p-2 */
+    @apply px-3 py-2; /* More balanced padding - reduced vertical, kept horizontal readable */
   }
 
   .chat-message-group {
-    @apply space-y-1; /* Tight spacing for consecutive messages */
+    @apply space-y-0.5; /* Very tight spacing for consecutive messages */
   }
 
   .chat-message-spacing {
-    @apply space-y-2; /* Reduced from space-y-4 to space-y-2 (50% reduction) */
+    @apply space-y-3; /* Reduced from space-y-4 to space-y-3 (25% reduction) */
   }
 
   .chat-container-compact {
-    @apply p-2; /* Reduced from p-4 to p-2 */
+    @apply px-3 py-2; /* Reduced from p-4, but keep some padding for readability */
   }
 
   .chat-timestamp-subtle {
-    @apply text-xs opacity-60; /* 12px font, 60% opacity */
+    @apply text-xs;
+    opacity: 0.6; /* 60% opacity as specified */
+    font-size: 0.75rem; /* Explicit 12px equivalent */
   }
 
   .chat-action-buttons-compact {
@@ -221,11 +223,11 @@ All colors MUST be HSL.
   }
 
   .chat-action-button-small {
-    @apply h-6 w-6 p-0; /* Reduced from h-7 w-7 (15% smaller) */
+    @apply h-6 w-6 p-0; /* Reduced from h-7 w-7 (about 15% smaller) */
   }
 
   .chat-action-button-small svg {
-    @apply h-2.5 w-2.5; /* Reduced from h-3 w-3 */
+    @apply h-2.5 w-2.5; /* Reduced from h-3 w-3 (about 17% smaller) */
   }
 
   .chat-avatar-small {
@@ -233,16 +235,16 @@ All colors MUST be HSL.
   }
 
   .chat-avatar-small svg {
-    @apply h-3 w-3; /* Reduced from h-4 w-4 */
+    @apply h-3 w-3; /* Reduced from h-4 w-4 (25% smaller) */
   }
 
-  /* More subtle color differences */
+  /* More subtle color differences - using borders and light backgrounds */
   .chat-bubble-user-subtle {
-    @apply border border-brand/20 bg-brand/5;
+    @apply border border-brand/30 bg-brand/10 text-foreground;
   }
 
   .chat-bubble-assistant-subtle {
-    @apply border border-muted bg-card;
+    @apply border border-border/30 bg-card;
   }
 
   /* Loading skeleton */
