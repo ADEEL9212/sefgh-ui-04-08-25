@@ -42,7 +42,7 @@ export const NavigationPanel = ({
     { id: 'console', label: 'Console', icon: Terminal, description: 'View application logs and debug info' },
     { id: 'proxy', label: 'Proxy Settings', icon: Wifi, description: 'Configure network proxy settings' },
     { id: 'language', label: 'Language', icon: Languages, description: 'Change interface language' },
-    { id: 'settings', label: 'Settings', icon: Settings, description: 'Application preferences' },
+    { id: 'settings', label: 'System Settings', icon: Settings, description: 'Application preferences and system settings' },
     { id: 'all-pages', label: 'All Pages', icon: Grid3X3, description: 'View all available pages' },
   ];
 
@@ -119,7 +119,11 @@ export const NavigationPanel = ({
                   variant={activeView === item.id ? "default" : "ghost"}
                   className="w-full justify-start gap-3"
                   onClick={() => {
-                    onViewChange(item.id);
+                    if (item.id === 'settings') {
+                      window.location.href = '/settings';
+                    } else {
+                      onViewChange(item.id);
+                    }
                     // Close nav on mobile when item is selected
                     if (window.innerWidth < 1024) {
                       onClose();
